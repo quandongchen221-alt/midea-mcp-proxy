@@ -126,4 +126,10 @@ if __name__ == "__main__":
     log.info("Starting Midea MCP server on port %d", port)
     mcp.settings.host = "0.0.0.0"
     mcp.settings.port = port
+    # Railway proxies through its own domain; disable DNS rebinding check
+    # so the Host header from *.up.railway.app is accepted.
+    try:
+        mcp.settings.transport_security.enable_dns_rebinding_protection = False
+    except Exception:
+        pass
     mcp.run(transport="streamable-http")
